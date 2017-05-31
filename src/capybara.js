@@ -195,13 +195,13 @@ Capybara = {
 
       for (var i = 0; i < rects.length; i++) {
         rect = rects[i];
-        if (rect.width > 0 && rect.height > 0)
+        //if (rect.width > 0 && rect.height > 0)
           return CapybaraInvocation.clickPosition(node, rect.left, rect.top, rect.width, rect.height);
       }
     }
 
     var visible = this.isNodeVisible(node);
-    throw new Capybara.UnpositionedElement(this.pathForNode(node), visible);
+    throw new Capybara.UnpositionedElement(this.pathForNode(node), visible, node.getClientRects().length);
   },
 
   click: function (index, action) {
@@ -451,11 +451,12 @@ Capybara.ClickFailed = function(expectedPath, actualPath, position) {
 Capybara.ClickFailed.prototype = new Error();
 Capybara.ClickFailed.prototype.constructor = Capybara.ClickFailed;
 
-Capybara.UnpositionedElement = function(path, visible) {
+Capybara.UnpositionedElement = function(path, visible, length) {
   this.name = 'Capybara.ClickFailed';
   this.message = 'Failed to find position for element ' + path;
   if (!visible)
     this.message += ' because it is not visible';
+  this.message += ' length: ' + length;
 };
 Capybara.UnpositionedElement.prototype = new Error();
 Capybara.UnpositionedElement.prototype.constructor = Capybara.UnpositionedElement;
